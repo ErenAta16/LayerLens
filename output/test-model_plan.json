@@ -1,0 +1,202 @@
+{
+  "allocations": [
+    {
+      "layer": "encoder.layer.0",
+      "method": "prefix",
+      "rank": 4,
+      "utility": 0.05432169622154715,
+      "cost": 4.589096896796304,
+      "flops": 6408.048030435566,
+      "vram": 0.004171906269814822,
+      "latency": 0.04171906269814822,
+      "total_score": 641.7272115198126
+    },
+    {
+      "layer": "encoder.layer.1",
+      "method": "prefix",
+      "rank": 5,
+      "utility": 0.07377921290223693,
+      "cost": 6.232867905980977,
+      "flops": 8703.3500941698,
+      "vram": 0.005666243550891797,
+      "latency": 0.05666243550891797,
+      "total_score": 871.5878158660822
+    },
+    {
+      "layer": "encoder.layer.2",
+      "method": "none",
+      "rank": 6,
+      "utility": 0.08427384586000813,
+      "cost": 3.2361156810243124,
+      "flops": 9941.347372106688,
+      "vram": 0.006472231362048625,
+      "latency": 0.06472231362048625,
+      "total_score": 994.7890798013719
+    },
+    {
+      "layer": "encoder.layer.3",
+      "method": "none",
+      "rank": 6,
+      "utility": 0.07945586939583348,
+      "cost": 3.0511053848000054,
+      "flops": 9372.995742105617,
+      "vram": 0.006102210769600011,
+      "latency": 0.06102210769600011,
+      "total_score": 937.9165077193684
+    },
+    {
+      "layer": "encoder.layer.4",
+      "method": "prefix",
+      "rank": 5,
+      "utility": 0.07443433023291587,
+      "cost": 6.288212218076734,
+      "flops": 8780.630879059874,
+      "vram": 0.005716556561887939,
+      "latency": 0.057165565618879394,
+      "total_score": 879.327018561821
+    },
+    {
+      "layer": "encoder.layer.5",
+      "method": "adapter",
+      "rank": 2,
+      "utility": 0.02674268747554874,
+      "cost": 2.464606077746572,
+      "flops": 3154.6957795156122,
+      "vram": 0.0020538383981221434,
+      "latency": 0.020538383981221434,
+      "total_score": 315.96475838934845
+    },
+    {
+      "layer": "encoder.layer.6",
+      "method": "prefix",
+      "rank": 5,
+      "utility": 0.06646917709496869,
+      "cost": 5.615316080982956,
+      "flops": 7841.023182172563,
+      "vram": 0.005104832800893596,
+      "latency": 0.05104832800893596,
+      "total_score": 785.2309967495338
+    },
+    {
+      "layer": "encoder.layer.7",
+      "method": "prefix",
+      "rank": 4,
+      "utility": 0.05954076389656337,
+      "cost": 5.030003733981673,
+      "flops": 7023.7143049053175,
+      "vram": 0.004572730667256066,
+      "latency": 0.04572730667256066,
+      "total_score": 703.3824612410621
+    },
+    {
+      "layer": "encoder.layer.8",
+      "method": "adapter",
+      "rank": 2,
+      "utility": 0.02954460586119528,
+      "cost": 2.722830876167757,
+      "flops": 3485.223521494729,
+      "vram": 0.0022690257301397976,
+      "latency": 0.022690257301397978,
+      "total_score": 349.0694142530096
+    },
+    {
+      "layer": "encoder.layer.9",
+      "method": "none",
+      "rank": 6,
+      "utility": 0.07886519216071024,
+      "cost": 3.028423378971273,
+      "flops": 9303.316620199752,
+      "vram": 0.006056846757942547,
+      "latency": 0.06056846757942547,
+      "total_score": 930.9440092272032
+    },
+    {
+      "layer": "encoder.layer.10",
+      "method": "prefix",
+      "rank": 3,
+      "utility": 0.0510911096068051,
+      "cost": 4.3161769395828955,
+      "flops": 6026.952526544843,
+      "vram": 0.003923797217802632,
+      "latency": 0.03923797217802632,
+      "total_score": 603.5628042193405
+    },
+    {
+      "layer": "encoder.layer.11",
+      "method": "adapter",
+      "rank": 3,
+      "utility": 0.04300469029902589,
+      "cost": 3.963312257958226,
+      "flops": 5073.03969018653,
+      "vram": 0.0033027602149651885,
+      "latency": 0.033027602149651884,
+      "total_score": 508.1002645064811
+    }
+  ],
+  "metadata": {
+    "version": 1,
+    "format": "hyperlora_manifest",
+    "layer_features": {
+      "encoder.layer.0": {
+        "param_share": 8.333333333333333e-05,
+        "attention_flag": 1.0,
+        "scaled_sensitivity": 0.05432169622154715
+      },
+      "encoder.layer.1": {
+        "param_share": 8.333333333333333e-05,
+        "attention_flag": 1.0,
+        "scaled_sensitivity": 0.07377921290223693
+      },
+      "encoder.layer.2": {
+        "param_share": 8.333333333333333e-05,
+        "attention_flag": 1.0,
+        "scaled_sensitivity": 0.08427384586000813
+      },
+      "encoder.layer.3": {
+        "param_share": 8.333333333333333e-05,
+        "attention_flag": 1.0,
+        "scaled_sensitivity": 0.07945586939583348
+      },
+      "encoder.layer.4": {
+        "param_share": 8.333333333333333e-05,
+        "attention_flag": 1.0,
+        "scaled_sensitivity": 0.07443433023291587
+      },
+      "encoder.layer.5": {
+        "param_share": 8.333333333333333e-05,
+        "attention_flag": 1.0,
+        "scaled_sensitivity": 0.02674268747554874
+      },
+      "encoder.layer.6": {
+        "param_share": 8.333333333333333e-05,
+        "attention_flag": 1.0,
+        "scaled_sensitivity": 0.06646917709496869
+      },
+      "encoder.layer.7": {
+        "param_share": 8.333333333333333e-05,
+        "attention_flag": 1.0,
+        "scaled_sensitivity": 0.05954076389656337
+      },
+      "encoder.layer.8": {
+        "param_share": 8.333333333333333e-05,
+        "attention_flag": 1.0,
+        "scaled_sensitivity": 0.02954460586119528
+      },
+      "encoder.layer.9": {
+        "param_share": 8.333333333333333e-05,
+        "attention_flag": 1.0,
+        "scaled_sensitivity": 0.07886519216071024
+      },
+      "encoder.layer.10": {
+        "param_share": 8.333333333333333e-05,
+        "attention_flag": 1.0,
+        "scaled_sensitivity": 0.0510911096068051
+      },
+      "encoder.layer.11": {
+        "param_share": 8.333333333333333e-05,
+        "attention_flag": 1.0,
+        "scaled_sensitivity": 0.04300469029902589
+      }
+    }
+  }
+}

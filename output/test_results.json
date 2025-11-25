@@ -1,0 +1,110 @@
+{
+  "summary": {
+    "total_tests": 7,
+    "successful": 7,
+    "failed": 0
+  },
+  "results": [
+    {
+      "test_name": "Default-Uniform",
+      "status": "success",
+      "total_layers": 12,
+      "method_distribution": {
+        "adapter": 12
+      },
+      "total_rank": 36,
+      "avg_utility": 0.04459054368558885,
+      "utility_nonzero_count": 12,
+      "manifest_path": "output\\test-model_plan.json"
+    },
+    {
+      "test_name": "High-Budget-Uniform",
+      "status": "success",
+      "total_layers": 12,
+      "method_distribution": {
+        "adapter": 12
+      },
+      "total_rank": 36,
+      "avg_utility": 0.04459054368558885,
+      "utility_nonzero_count": 12,
+      "manifest_path": "output\\test-model_plan.json"
+    },
+    {
+      "test_name": "Early-Sensitive",
+      "status": "success",
+      "total_layers": 12,
+      "method_distribution": {
+        "prefix": 4,
+        "lora": 8
+      },
+      "total_rank": 28,
+      "avg_utility": 0.03607122401681973,
+      "utility_nonzero_count": 12,
+      "manifest_path": "output\\test-model_plan.json"
+    },
+    {
+      "test_name": "Late-Sensitive",
+      "status": "success",
+      "total_layers": 12,
+      "method_distribution": {
+        "lora": 8,
+        "prefix": 4
+      },
+      "total_rank": 28,
+      "avg_utility": 0.036071224016819725,
+      "utility_nonzero_count": 12,
+      "manifest_path": "output\\test-model_plan.json"
+    },
+    {
+      "test_name": "LoRA-Cheap",
+      "status": "success",
+      "total_layers": 12,
+      "method_distribution": {
+        "adapter": 12
+      },
+      "total_rank": 36,
+      "avg_utility": 0.04459054368558885,
+      "utility_nonzero_count": 12,
+      "manifest_path": "output\\test-model_plan.json"
+    },
+    {
+      "test_name": "Utility-Focused",
+      "status": "success",
+      "total_layers": 12,
+      "method_distribution": {
+        "prefix": 4,
+        "lora": 8
+      },
+      "total_rank": 28,
+      "avg_utility": 0.03607122401681973,
+      "utility_nonzero_count": 12,
+      "manifest_path": "output\\test-model_plan.json"
+    },
+    {
+      "test_name": "Random-Sensitivity",
+      "status": "success",
+      "total_layers": 12,
+      "method_distribution": {
+        "prefix": 6,
+        "none": 3,
+        "adapter": 3
+      },
+      "total_rank": 51,
+      "avg_utility": 0.06012693175061323,
+      "utility_nonzero_count": 12,
+      "manifest_path": "output\\test-model_plan.json"
+    }
+  ],
+  "issues": [
+    {
+      "severity": "MEDIUM",
+      "issue": "Uniform method selection across all layers",
+      "affected_tests": [
+        "Default-Uniform",
+        "High-Budget-Uniform",
+        "LoRA-Cheap"
+      ],
+      "description": "All layers are assigned the same PEFT method, suggesting utility scores are not differentiating layers properly."
+    }
+  ]
+}

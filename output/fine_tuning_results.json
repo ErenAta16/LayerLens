@@ -1,0 +1,163 @@
+[
+  {
+    "baseline": "layerlens",
+    "config": {
+      "total_params": 109483778,
+      "trainable_params": 70656,
+      "trainable_ratio": 0.0006453558809415583,
+      "allocations": {
+        "encoder.layer.0": {
+          "method": "lora",
+          "rank": 1,
+          "utility": 0.0,
+          "cost": 1.0,
+          "flops": 1536.0,
+          "vram": 0.001,
+          "latency": 0.01,
+          "total_score": 153.80110000000002
+        },
+        "encoder.layer.1": {
+          "method": "none",
+          "rank": 0,
+          "utility": 0.07780819454565296,
+          "cost": 0.0,
+          "flops": 0.0,
+          "vram": 0.0,
+          "latency": 0.0,
+          "total_score": 0.0
+        },
+        "encoder.layer.2": {
+          "method": "lora",
+          "rank": 1,
+          "utility": 0.0010930824709398151,
+          "cost": 1.0,
+          "flops": 1536.0,
+          "vram": 0.001,
+          "latency": 0.01,
+          "total_score": 153.80110000000002
+        },
+        "encoder.layer.3": {
+          "method": "prefix",
+          "rank": 6,
+          "utility": 0.05115756971477008,
+          "cost": 6.6000000000000005,
+          "flops": 9216.0,
+          "vram": 0.006,
+          "latency": 0.06,
+          "total_score": 922.9266
+        },
+        "encoder.layer.4": {
+          "method": "none",
+          "rank": 0,
+          "utility": 0.1,
+          "cost": 0.0,
+          "flops": 0.0,
+          "vram": 0.0,
+          "latency": 0.0,
+          "total_score": 0.0
+        },
+        "encoder.layer.5": {
+          "method": "none",
+          "rank": 0,
+          "utility": 0.0807794791368486,
+          "cost": 0.0,
+          "flops": 0.0,
+          "vram": 0.0,
+          "latency": 0.0,
+          "total_score": 0.0
+        },
+        "encoder.layer.6": {
+          "method": "prefix",
+          "rank": 7,
+          "utility": 0.05259731000724513,
+          "cost": 7.700000000000001,
+          "flops": 10752.0,
+          "vram": 0.007,
+          "latency": 0.07,
+          "total_score": 1076.7477000000001
+        },
+        "encoder.layer.7": {
+          "method": "adapter",
+          "rank": 6,
+          "utility": 0.045390778476139655,
+          "cost": 7.199999999999999,
+          "flops": 9216.0,
+          "vram": 0.006,
+          "latency": 0.06,
+          "total_score": 923.0466
+        },
+        "encoder.layer.8": {
+          "method": "prefix",
+          "rank": 13,
+          "utility": 0.07177155326102784,
+          "cost": 14.3,
+          "flops": 19968.0,
+          "vram": 0.013000000000000001,
+          "latency": 0.13,
+          "total_score": 1999.6743
+        },
+        "encoder.layer.9": {
+          "method": "adapter",
+          "rank": 5,
+          "utility": 0.04450562620358084,
+          "cost": 6.0,
+          "flops": 7680.0,
+          "vram": 0.005,
+          "latency": 0.05,
+          "total_score": 769.2055
+        },
+        "encoder.layer.10": {
+          "method": "none",
+          "rank": 0,
+          "utility": 0.09441251072621236,
+          "cost": 0.0,
+          "flops": 0.0,
+          "vram": 0.0,
+          "latency": 0.0,
+          "total_score": 0.0
+        },
+        "encoder.layer.11": {
+          "method": "prefix",
+          "rank": 7,
+          "utility": 0.05152753957883274,
+          "cost": 7.700000000000001,
+          "flops": 10752.0,
+          "vram": 0.007,
+          "latency": 0.07,
+          "total_score": 1076.7477000000001
+        }
+      }
+    },
+    "metrics": {
+      "accuracy": 0.8028626899494433,
+      "f1": 0.8724996591005433,
+      "training_time": 16.80865168571472
+    }
+  },
+  {
+    "baseline": "full_ft",
+    "config": {
+      "total_params": 109483778,
+      "trainable_params": 109483778,
+      "trainable_ratio": 1.0
+    },
+    "metrics": {
+      "accuracy": 0.8097395798663674,
+      "f1": 0.7515833213312259,
+      "training_time": 16.785787343978882
+    }
+  },
+  {
+    "baseline": "fixed_lora",
+    "config": {
+      "total_params": 109483778,
+      "trainable_params": 147456,
+      "trainable_ratio": 0.0013468296645736868
+    },
+    "metrics": {
+      "accuracy": 0.8423468356197519,
+      "f1": 0.7958531380657665,
+      "training_time": 16.110397577285767
+    }
+  }
+]
