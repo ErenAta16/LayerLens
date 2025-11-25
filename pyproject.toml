@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=65", "wheel", "Cython>=3.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "layerlens"
+version = "0.1.0"
+description = "LayerLens - Adaptive Low-Rank Adaptation Selector"
+authors = [{ name = "LayerLens Team" }]
+requires-python = ">=3.9"
+dependencies = ["numpy>=1.24", "scipy>=1.10.0"]
+[project.optional-dependencies]
+demo = ["transformers>=4.20.0", "torch>=2.0.0"]
+
+[tool.setuptools]
+packages = ["hyperlora"]
+
+[[tool.setuptools.ext-modules]]
+name = "hyperlora.profiling._aggregators"
+sources = ["hyperlora/profiling/_aggregators.pyx"]
+language = "c"
+
+[[tool.setuptools.ext-modules]]
+name = "hyperlora.profiling._batch"
+sources = ["hyperlora/profiling/_batch.pyx"]
+language = "c"
+
+[[tool.setuptools.ext-modules]]
+name = "hyperlora.optimization._solver"
+sources = ["hyperlora/optimization/_solver.pyx"]
+language = "c"
+
+[tool.cython]
+language_level = 3
+
