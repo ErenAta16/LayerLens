@@ -16,9 +16,9 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from hyperlora.cli import run_pipeline
-from hyperlora.config import ProfilingConfig, OptimizationConfig, LatencyProfile
-from hyperlora.meta import ModelSpec, LayerSpec
+from layerlens.cli import run_pipeline
+from layerlens.config import ProfilingConfig, OptimizationConfig, LatencyProfile
+from layerlens.models import ModelSpec, LayerSpec
 
 
 def create_simple_yolo_backbone(input_channels: int = 3, num_layers: int = 6) -> nn.Module:

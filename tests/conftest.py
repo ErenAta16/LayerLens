@@ -6,8 +6,8 @@ import pytest
 import numpy as np
 from pathlib import Path
 
-from hyperlora.config import ProfilingConfig, OptimizationConfig, LatencyProfile
-from hyperlora.meta import ModelSpec, LayerSpec
+from layerlens.config import ProfilingConfig, OptimizationConfig, LatencyProfile
+from layerlens.models import ModelSpec, LayerSpec
 
 
 @pytest.fixture

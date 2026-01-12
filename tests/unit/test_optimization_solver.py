@@ -3,9 +3,9 @@ Unit tests for optimization solver.
 """
 
 import pytest
-from hyperlora.optimization.solver import AllocationSolver, AllocationResult
-from hyperlora.config import OptimizationConfig, ProfilingConfig
-from hyperlora.meta import LayerSpec
+from layerlens.optimization.solver import AllocationSolver, AllocationResult
+from layerlens.config import OptimizationConfig, ProfilingConfig
+from layerlens.models import LayerSpec
 
 
 @pytest.fixture
@@ -62,7 +62,7 @@ def test_solver_latency_estimation(solver):
 
 def test_solver_latency_estimation_with_profile(solver_config):
     """Test latency estimation with LatencyProfile."""
-    from hyperlora.config import LatencyProfile
+    from layerlens.config import LatencyProfile
     
     latency_profile = LatencyProfile(
         device_type="gpu",

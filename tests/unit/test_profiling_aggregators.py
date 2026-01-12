@@ -4,7 +4,7 @@ Unit tests for profiling aggregators.
 
 import pytest
 import numpy as np
-from hyperlora.profiling.aggregators import aggregate_scores
+from layerlens.profiling.aggregators import aggregate_scores
 
 
 def test_aggregate_scores_basic():

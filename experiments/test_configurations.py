@@ -7,9 +7,9 @@ Tests LayerLens with different configurations to identify issues and validate be
 from pathlib import Path
 import json
 import numpy as np
-from hyperlora.cli import run_pipeline
-from hyperlora.config import ProfilingConfig, OptimizationConfig
-from hyperlora.meta import ModelSpec, LayerSpec
+from layerlens.cli import run_pipeline
+from layerlens.config import ProfilingConfig, OptimizationConfig
+from layerlens.models import ModelSpec, LayerSpec
 
 
 def create_test_model_spec(num_layers: int = 12, hidden_size: int = 768) -> ModelSpec:

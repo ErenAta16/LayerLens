@@ -8,8 +8,8 @@ import sys
 import argparse
 from pathlib import Path
 
-from hyperlora.validation import validate_manifest
-from hyperlora.meta import ModelSpec, LayerSpec
+from layerlens.validation import validate_manifest
+from layerlens.models import ModelSpec, LayerSpec
 
 
 def create_bert_model_spec() -> ModelSpec:

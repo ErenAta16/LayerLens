@@ -16,9 +16,9 @@ pip install transformers torch
 
 ```python
 from pathlib import Path
-from hyperlora.cli import run_pipeline
-from hyperlora.config import ProfilingConfig, OptimizationConfig
-from hyperlora.meta import ModelSpec, LayerSpec
+from layerlens.cli import run_pipeline
+from layerlens.config import ProfilingConfig, OptimizationConfig
+from layerlens.models import ModelSpec, LayerSpec
 
 # Define your model
 layers = [
@@ -162,7 +162,7 @@ results = pipeline.process_batch(
 ### Reading the Manifest
 
 ```python
-from hyperlora.cli import apply_manifest
+from layerlens.cli import apply_manifest
 from pathlib import Path
 
 manifest_path = Path("output/bert-base-uncased_plan.json")
@@ -200,7 +200,7 @@ for layer_name, config in allocations.items():
 For realistic latency estimation, provide a `LatencyProfile`:
 
 ```python
-from hyperlora.config import LatencyProfile, OptimizationConfig
+from layerlens.config import LatencyProfile, OptimizationConfig
 
 # LLM example
 llm_profile = LatencyProfile(
@@ -260,7 +260,7 @@ The manifest is a JSON file with the following structure:
   ],
   "metadata": {
     "version": 1,
-    "format": "hyperlora_manifest",
+    "format": "layerlens_manifest",
     "layer_features": {...}
   }
 }

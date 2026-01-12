@@ -24,9 +24,9 @@ except ImportError:
     TRANSFORMERS_AVAILABLE = False
     print("Warning: transformers/torch not available. Fine-tuning experiments disabled.")
 
-from hyperlora.cli import run_pipeline, apply_manifest
-from hyperlora.config import ProfilingConfig, OptimizationConfig
-from hyperlora.meta import ModelSpec, LayerSpec
+from layerlens.cli import run_pipeline, apply_manifest
+from layerlens.config import ProfilingConfig, OptimizationConfig
+from layerlens.models import ModelSpec, LayerSpec
 
 
 class FineTuningExperiment:

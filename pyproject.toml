@@ -16,21 +16,21 @@ pipeline = ["transformers>=4.20.0", "torch>=2.0.0", "torchvision>=0.15.0", "pill
 dev = ["pytest>=7.0.0", "pytest-cov>=4.0.0", "pytest-mock>=3.10.0"]
 
 [tool.setuptools]
-packages = ["hyperlora"]
+packages = ["layerlens"]
 
 [[tool.setuptools.ext-modules]]
-name = "hyperlora.profiling._aggregators"
-sources = ["hyperlora/profiling/_aggregators.pyx"]
+name = "layerlens.profiling._aggregators"
+sources = ["layerlens/profiling/_aggregators.pyx"]
 language = "c"
 
 [[tool.setuptools.ext-modules]]
-name = "hyperlora.profiling._batch"
-sources = ["hyperlora/profiling/_batch.pyx"]
+name = "layerlens.profiling._batch"
+sources = ["layerlens/profiling/_batch.pyx"]
 language = "c"
 
 [[tool.setuptools.ext-modules]]
-name = "hyperlora.optimization._solver"
-sources = ["hyperlora/optimization/_solver.pyx"]
+name = "layerlens.optimization._solver"
+sources = ["layerlens/optimization/_solver.pyx"]
 language = "c"
 
 [tool.cython]

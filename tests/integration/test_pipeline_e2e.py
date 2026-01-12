@@ -4,9 +4,9 @@ End-to-end integration tests for LayerLens pipeline.
 
 import pytest
 from pathlib import Path
-from hyperlora.cli import run_pipeline
-from hyperlora.config import ProfilingConfig, OptimizationConfig
-from hyperlora.meta import ModelSpec, LayerSpec
+from layerlens.cli import run_pipeline
+from layerlens.config import ProfilingConfig, OptimizationConfig
+from layerlens.models import ModelSpec, LayerSpec
 
 
 def test_pipeline_e2e_basic(sample_model_spec, sample_activation_cache, sample_profiling_config, 

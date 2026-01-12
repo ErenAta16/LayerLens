@@ -26,7 +26,7 @@ pip install -e .[dev]
 pytest
 
 # Run with coverage
-pytest --cov=hyperlora --cov-report=html
+pytest --cov=layerlens --cov-report=html
 
 # Run specific test file
 pytest tests/unit/test_profiling_analyzers.py

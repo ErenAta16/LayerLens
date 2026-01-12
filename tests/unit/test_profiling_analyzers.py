@@ -3,13 +3,13 @@ Unit tests for profiling analyzers.
 """
 
 import pytest
-from hyperlora.profiling.analyzers import (
+from layerlens.profiling.analyzers import (
     GradientEnergyAnalyzer,
     FisherInformationAnalyzer,
     ProxyFineTuneAnalyzer,
 )
-from hyperlora.config import ProfilingConfig
-from hyperlora.meta import LayerSpec
+from layerlens.config import ProfilingConfig
+from layerlens.models import LayerSpec
 
 
 @pytest.fixture

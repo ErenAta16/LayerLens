@@ -15,9 +15,9 @@ import torch
 import torch.nn as nn
 from transformers import BertModel, BertConfig
 
-from hyperlora.cli import run_pipeline
-from hyperlora.config import ProfilingConfig, OptimizationConfig, LatencyProfile
-from hyperlora.meta import ModelSpec, LayerSpec
+from layerlens.cli import run_pipeline
+from layerlens.config import ProfilingConfig, OptimizationConfig, LatencyProfile
+from layerlens.models import ModelSpec, LayerSpec
 
 
 def extract_model_layers(model: nn.Module, model_name: str) -> ModelSpec:

@@ -9,3 +9,17 @@ Requires-Dist: scipy>=1.10.0
 Provides-Extra: demo
 Requires-Dist: transformers>=4.20.0; extra == "demo"
 Requires-Dist: torch>=2.0.0; extra == "demo"
+Provides-Extra: yolo
+Requires-Dist: ultralytics>=8.0.0; extra == "yolo"
+Requires-Dist: torch>=2.0.0; extra == "yolo"
+Requires-Dist: torchvision>=0.15.0; extra == "yolo"
+Provides-Extra: pipeline
+Requires-Dist: transformers>=4.20.0; extra == "pipeline"
+Requires-Dist: torch>=2.0.0; extra == "pipeline"
+Requires-Dist: torchvision>=0.15.0; extra == "pipeline"
+Requires-Dist: pillow>=9.0.0; extra == "pipeline"
+Requires-Dist: ultralytics>=8.0.0; extra == "pipeline"
+Provides-Extra: dev
+Requires-Dist: pytest>=7.0.0; extra == "dev"
+Requires-Dist: pytest-cov>=4.0.0; extra == "dev"
+Requires-Dist: pytest-mock>=3.10.0; extra == "dev"
