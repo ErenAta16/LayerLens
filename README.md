@@ -65,6 +65,38 @@ The system works in three steps:
 
 Cython 3.0 brings better pure-Python typing support and deterministic builds for Python 3.12, making it practical for high-performance kernels deployed as wheels in containers.
 
+## LLM-YOLO Pipeline
+
+LayerLens includes an end-to-end pipeline that orchestrates YOLO object detection and LLM textual analysis, with detailed latency measurement at each step. This is particularly useful for scenarios like X-ray analysis where object detection results are analyzed by an LLM.
+
+### Pipeline Flow
+
+```
+Image → YOLO Detection → Bounding Boxes → LLM Analysis → Textual Report
+  ↓           ↓                ↓              ↓              ↓
+Load      Inference      Format Prompt    Generate      Save Results
+(ms)      (ms)           (ms)             (ms)          (JSON)
+```
+
+### Usage
+
+```bash
+# Install pipeline dependencies
+pip install -e .[pipeline]
+
+# Run pipeline demo
+python llm_yolo_pipeline.py
+```
+
+The pipeline measures and reports:
+- **Image loading time**
+- **YOLO detection latency** (per detection)
+- **LLM analysis latency** (per token generation)
+- **Communication overhead** between models
+- **Total end-to-end latency**
+
+Results are saved as JSON with complete timing breakdown, enabling analysis of bottlenecks and optimization opportunities.
+
 ## MLOps Integration
 
 The system integrates into MLOps pipelines as follows:

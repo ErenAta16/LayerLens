@@ -109,6 +109,56 @@ The YOLO demo will:
 3. Run LayerLens optimization with YOLO-specific latency profiling (resolution-aware)
 4. Generate manifest optimized for real-time object detection latency targets
 
+#### LLM-YOLO Pipeline Demo
+
+For end-to-end analysis combining YOLO detection with LLM textual analysis:
+
+```bash
+# Install dependencies
+pip install -e .[pipeline]
+
+# Run pipeline
+python llm_yolo_pipeline.py
+```
+
+The pipeline will:
+1. Load an image (e.g., X-ray)
+2. Run YOLO object detection to find bounding boxes
+3. Send detection results to LLM for textual analysis
+4. Measure and report latency at each step
+5. Save complete results with timing breakdown to JSON
+
+Example usage in code:
+
+```python
+from llm_yolo_pipeline import LLMYOLOPipeline
+
+# Create pipeline
+pipeline = LLMYOLOPipeline(
+    yolo_model="yolov8n",
+    llm_model="gpt2",  # or any HuggingFace model
+    device="auto",
+)
+
+# Process single image
+result = pipeline.process_image(
+    "path/to/image.jpg",
+    image_description="X-ray medical image",
+)
+
+# Access results
+print(f"YOLO latency: {result.detection.latency_ms:.2f} ms")
+print(f"LLM latency: {result.llm_analysis.latency_ms:.2f} ms")
+print(f"Total latency: {result.total_latency_ms:.2f} ms")
+print(f"LLM analysis: {result.llm_analysis.text}")
+
+# Process batch
+results = pipeline.process_batch(
+    ["img1.jpg", "img2.jpg", "img3.jpg"],
+    image_description="X-ray image",
+)
+```
+
 ### Reading the Manifest
 
 ```python
