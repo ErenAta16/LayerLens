@@ -85,7 +85,7 @@ Load      Inference      Format Prompt    Generate      Save Results
 pip install -e .[pipeline]
 
 # Run pipeline demo
-python llm_yolo_pipeline.py
+python demos/llm_yolo_pipeline.py
 ```
 
 The pipeline measures and reports:

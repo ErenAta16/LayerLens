@@ -464,9 +464,10 @@ def main():
     
     # Create a dummy image for demo (or use real image path)
     print("\nCreating sample image for demo...")
+    output_base = Path(__file__).parent.parent / "output"
+    output_base.mkdir(exist_ok=True, parents=True)
     dummy_image = Image.new("RGB", (640, 640), color="gray")
-    dummy_path = Path("output") / "dummy_xray.png"
-    dummy_path.parent.mkdir(exist_ok=True)
+    dummy_path = output_base / "dummy_xray.png"
     dummy_image.save(dummy_path)
     print(f"Sample image saved to: {dummy_path}\n")
     
@@ -506,7 +507,8 @@ def main():
     print("=" * 60)
     
     # Save results to JSON
-    output_path = Path("output") / "llm_yolo_pipeline_result.json"
+    output_base = Path(__file__).parent.parent / "output"
+    output_path = output_base / "llm_yolo_pipeline_result.json"
     with open(output_path, "w") as f:
         json.dump(result.to_dict(), f, indent=2)
     print(f"\nResults saved to: {output_path}")

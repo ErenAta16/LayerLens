@@ -371,8 +371,8 @@ def main():
     # Run LayerLens pipeline
     print("Running LayerLens pipeline for YOLO...")
     print("-" * 60)
-    output_dir = Path("output")
-    output_dir.mkdir(exist_ok=True)
+    output_dir = Path(__file__).parent.parent / "output"
+    output_dir.mkdir(exist_ok=True, parents=True)
     
     manifest_path = run_pipeline(
         model_spec=model_spec,
