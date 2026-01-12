@@ -36,3 +36,14 @@ language = "c"
 [tool.cython]
 language_level = 3
 
+[tool.pyright]
+include = ["layerlens", "scripts", "demos", "experiments", "tests"]
+exclude = ["**/__pycache__", "**/node_modules", "**/.git", "**/build", "**/dist", "**/*.egg-info"]
+reportMissingImports = "warning"
+reportMissingTypeStubs = false
+pythonVersion = "3.9"
+pythonPlatform = "All"
+typeCheckingMode = "basic"
+venvPath = "."
+venv = "."
+
