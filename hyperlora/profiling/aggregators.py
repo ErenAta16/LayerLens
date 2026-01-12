@@ -22,9 +22,13 @@ def aggregate_scores(metrics: Dict[str, float], weights: Dict[str, float]) -> fl
     """
     Combines scores from different analyses using weighted average.
     Calls Cython implementation if available, otherwise falls back to Python code.
+    
+    If weights are empty or all zero, uses equal weights for all metrics.
     """
 
     keys = list(metrics.keys())
+    if not keys:
+        return 0.0
 
     if np is not None:
         metric_arr = np.array([metrics[k] for k in keys], dtype=np.float64)
@@ -33,7 +37,11 @@ def aggregate_scores(metrics: Dict[str, float], weights: Dict[str, float]) -> fl
         if aggregate_scores_c is not None:
             return float(aggregate_scores_c(metric_arr, weight_arr))
 
-        total_weight = weight_arr.sum() or 1.0
+        total_weight = weight_arr.sum()
+        # If no weights provided or all zero, use equal weights
+        if total_weight == 0.0:
+            return float(metric_arr.mean())
+        
         weighted_sum = float(np.dot(metric_arr, weight_arr))
         return weighted_sum / total_weight
 
@@ -45,5 +53,9 @@ def aggregate_scores(metrics: Dict[str, float], weights: Dict[str, float]) -> fl
         total_weight += weight
         weighted_sum += metrics[key] * weight
 
-    return weighted_sum / (total_weight or 1.0)
+    # If no weights provided or all zero, use equal weights
+    if total_weight == 0.0:
+        return sum(metrics.values()) / len(metrics)
+
+    return weighted_sum / total_weight
 
