@@ -16,7 +16,7 @@ import torch.nn as nn
 from transformers import BertModel, BertConfig
 
 from hyperlora.cli import run_pipeline
-from hyperlora.config import ProfilingConfig, OptimizationConfig
+from hyperlora.config import ProfilingConfig, OptimizationConfig, LatencyProfile
 from hyperlora.meta import ModelSpec, LayerSpec
 
 
@@ -266,12 +266,37 @@ def main():
         gradient_window=64,
         fisher_trace_samples=8,
     )
-    
+
+    # Build a latency profile tailored for an LLM running on the detected device.
+    # These values are heuristic but give the optimizer a more realistic signal
+    # than the original fixed rank * constant model.
+    if device == "cuda":
+        latency_profile = LatencyProfile(
+            device_type="gpu",
+            model_family="llm",
+            batch_size=batch_size,
+            sequence_length=seq_length,
+            base_ms_per_layer=0.4,
+            ms_per_rank_unit=0.015,
+            io_overhead_ms=5.0,
+        )
+    else:
+        latency_profile = LatencyProfile(
+            device_type="cpu",
+            model_family="llm",
+            batch_size=batch_size,
+            sequence_length=seq_length,
+            base_ms_per_layer=1.2,
+            ms_per_rank_unit=0.03,
+            io_overhead_ms=10.0,
+        )
+
     optimization_cfg = OptimizationConfig(
         max_trainable_params=50000,  # Allow up to 50k trainable parameters
         max_flops=1e9,  # 1 GFLOPs
         max_vram_gb=8.0,  # 8 GB VRAM
-        latency_target_ms=100.0,  # 100ms latency target
+        latency_target_ms=100.0,  # 100ms end-to-end latency target
+        latency_profile=latency_profile,
     )
     
     # Run LayerLens pipeline

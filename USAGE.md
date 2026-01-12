@@ -69,23 +69,45 @@ manifest_path = run_pipeline(
 print(f"Manifest saved to: {manifest_path}")
 ```
 
-### Real Model Demo
+### Real Model Demos
 
-For testing with a real transformer model (BERT-base):
+#### LLM Demo (BERT-base)
+
+For testing with a real transformer model:
 
 ```bash
 # Install dependencies
 pip install transformers torch
 
-# Run demo
+# Run LLM demo
 python demo_real_model.py
 ```
 
 The demo will:
 1. Load BERT-base model
 2. Compute real gradients and Fisher information
-3. Run LayerLens optimization
+3. Run LayerLens optimization with LLM-specific latency profiling
 4. Generate manifest with optimal PEFT configuration
+
+#### YOLO Demo (Object Detection)
+
+For testing with YOLO object detection models:
+
+```bash
+# Install dependencies
+pip install torch torchvision
+# Optional: for YOLOv8 support
+pip install ultralytics
+
+# Run YOLO demo
+python demo_yolo_model.py
+```
+
+The YOLO demo will:
+1. Load/create YOLO model (YOLOv8 if available, or simplified backbone)
+2. Compute real gradients and Fisher information for convolutional layers
+3. Run LayerLens optimization with YOLO-specific latency profiling (resolution-aware)
+4. Generate manifest optimized for real-time object detection latency targets
 
 ### Reading the Manifest
 
@@ -118,9 +140,54 @@ for layer_name, config in allocations.items():
 - `max_flops`: Maximum FLOPs budget
 - `max_vram_gb`: Maximum VRAM usage in GB
 - `latency_target_ms`: Target latency in milliseconds
+- `latency_profile`: Optional `LatencyProfile` for realistic latency modeling (see below)
 - `candidate_methods`: List of PEFT methods to consider (default: ["lora", "adapter", "prefix", "none"])
 - `method_penalties`: Cost penalties for each method
 - `objective_weights`: Weights for multi-objective optimization
+
+### LatencyProfile
+
+For realistic latency estimation, provide a `LatencyProfile`:
+
+```python
+from hyperlora.config import LatencyProfile, OptimizationConfig
+
+# LLM example
+llm_profile = LatencyProfile(
+    device_type="gpu",  # or "cpu"
+    model_family="llm",
+    batch_size=4,
+    sequence_length=2048,
+    base_ms_per_layer=0.4,
+    ms_per_rank_unit=0.015,
+    io_overhead_ms=5.0,
+)
+
+# YOLO example
+yolo_profile = LatencyProfile(
+    device_type="gpu",
+    model_family="yolo",
+    batch_size=2,
+    input_resolution=640,  # Image resolution
+    base_ms_per_layer=0.8,
+    ms_per_rank_unit=0.025,
+    io_overhead_ms=8.0,
+)
+
+optimization_cfg = OptimizationConfig(
+    max_trainable_params=50000,
+    max_flops=1e9,
+    max_vram_gb=8.0,
+    latency_target_ms=100.0,
+    latency_profile=llm_profile,  # or yolo_profile
+)
+```
+
+The latency profile enables:
+- **Device-aware scaling**: GPU vs CPU performance differences
+- **Model-family aware scaling**: LLM (sequence length) vs Vision (resolution²) scaling
+- **Workload-aware scaling**: Batch size and input dimensions
+- **I/O overhead**: Fixed communication/orchestration delays
 
 ## Output Format
 

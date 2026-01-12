@@ -43,8 +43,16 @@ class GradientEnergyAnalyzer(LayerSensitivityAnalyzer):
     """
 
     def score(self, layer: LayerSpec, activations: Any) -> float:
-        # Note: This computation is a placeholder; the real implementation will be in Cython.
+        """
+        Returns a gradient-based sensitivity score.
+
+        Important: `create_activation_cache` in the real-model demo already
+        computes **raw** gradient norms. We keep this method as the single
+        normalization point to avoid double-normalization issues that were
+        identified in earlier experiments.
+        """
         gradient_norm = activations.get("grad_norm", 0.0)
+        # Normalize once by hidden size to make scores comparable across layers.
         return gradient_norm / max(layer.hidden_size, 1)
 
     def batch_score(self, gradient_matrix: Any) -> Union[List[float], npt.NDArray[np.float64]]:
@@ -79,6 +87,12 @@ class FisherInformationAnalyzer(LayerSensitivityAnalyzer):
     """
 
     def score(self, layer: LayerSpec, activations: Any) -> float:
+        """
+        Returns a Fisher-trace-based sensitivity score.
+
+        The demo caches store raw approximated Fisher traces; here we apply a
+        single normalization by sqrt(hidden_size) to stabilise magnitudes.
+        """
         fisher_trace = activations.get("fisher_trace", 0.0)
         return fisher_trace / (layer.hidden_size ** 0.5)
 

@@ -12,7 +12,7 @@ from typing import Dict, List
 from array import array
 
 from typing import Optional
-from ..config import OptimizationConfig, ProfilingConfig
+from ..config import OptimizationConfig, ProfilingConfig, LatencyProfile
 from ..meta import LayerSpec
 from ..profiling import aggregate_scores
 
@@ -319,9 +319,50 @@ class AllocationSolver:
     def _estimate_latency(self, rank: float) -> float:
         """
         Latency estimate (ms).
+
+        This uses a more realistic parametric model when a LatencyProfile is
+        provided, otherwise it falls back to the original simple heuristic.
         """
 
-        return rank * 0.01
+        profile: Optional[LatencyProfile] = getattr(self.config, "latency_profile", None)
+        if profile is None:
+            # Backwards-compatible fallback: simple heuristic
+            return rank * 0.01
+
+        # Base per-layer latency in ms: base + rank * slope
+        base = max(profile.base_ms_per_layer, 0.0)
+        slope = max(profile.ms_per_rank_unit, 0.0)
+        latency = base + slope * max(rank, 0.0)
+
+        # Device factor: GPUs are typically faster per layer, CPUs slower.
+        if profile.device_type.lower() == "gpu":
+            device_factor = 0.7
+        else:
+            # Default to CPU-like behaviour
+            device_factor = 1.8
+
+        # Workload scaling:
+        # - For LLMs, latency roughly scales with sequence length and batch size.
+        # - For vision models (YOLO / ViT), it scales with resolution^2 and batch.
+        model_family = profile.model_family.lower()
+        batch_factor = max(profile.batch_size / 8.0, 0.25)
+
+        if model_family == "llm":
+            seq_factor = max(profile.sequence_length / 2048.0, 0.25)
+            workload_factor = batch_factor * seq_factor
+        else:
+            # Vision-style default (YOLO, ViT, etc.)
+            baseline_res = 640.0
+            res = float(profile.input_resolution or baseline_res)
+            res_factor = max((res * res) / (baseline_res * baseline_res), 0.25)
+            workload_factor = batch_factor * res_factor
+
+        latency *= device_factor * workload_factor
+
+        # Add any fixed I/O or orchestration overhead (e.g. inter-model hops).
+        latency += max(profile.io_overhead_ms, 0.0)
+
+        return latency
 
     def _score_multi_objective(
         self, cost: float, flop: float, vram: float, latency: float
