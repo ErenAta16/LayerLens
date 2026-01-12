@@ -1,31 +1,59 @@
-# LayerLens Core Dependencies
-# ============================
-# For basic functionality (always required)
+# LayerLens Dependencies
+# ========================
+# For Google Colab Quick Setup:
+#   pip install -r requirements.txt
+
+# CORE DEPENDENCIES (Always Required)
+# ------------------------------------
 numpy>=1.24
 scipy>=1.10.0
 
-# Optional: For demos and real model usage
-# Uncomment if you want to run demos
+# OPTIONAL DEPENDENCIES (For Demos & Experiments)
+# -----------------------------------------------
+# Uncomment the sections you need, or install with:
+#   pip install -e ".[demo,yolo,pipeline,dev]"
+
+# For BERT/Transformer demos:
 # transformers>=4.20.0
 # torch>=2.0.0
 
-# Optional: For YOLO integration
-# Uncomment if you want to use YOLO models
+# For YOLO demos:
 # ultralytics>=8.0.0
 # torchvision>=0.15.0
 
-# Optional: For LLM-YOLO pipeline
-# Uncomment if you want to use the pipeline
+# For LLM-YOLO pipeline:
 # pillow>=9.0.0
 
-# Build dependencies (for Cython compilation)
-# Uncomment for development or if you want Cython acceleration
+# BUILD DEPENDENCIES (For Development)
+# -------------------------------------
+# Only needed if you want to compile Cython modules
+# (Colab users can use Python fallback, no compilation needed)
 # setuptools>=65
 # wheel
 # Cython>=3.0
 
-# Note: For full installation with all optional dependencies, use:
-# pip install -e ".[demo,yolo,pipeline]"
-#
-# For Colab, the Python fallback works without Cython compilation.
+# DEVELOPMENT DEPENDENCIES
+# ------------------------
+# pytest>=7.0.0
+# pytest-cov>=4.0.0
+# pytest-mock>=3.10.0
 
+# QUICK INSTALL OPTIONS:
+# ----------------------
+# Minimal (core only):
+#   pip install -e .
+#
+# With demos:
+#   pip install -e ".[demo]"
+#
+# With YOLO support:
+#   pip install -e ".[yolo]"
+#
+# With full pipeline:
+#   pip install -e ".[pipeline]"
+#
+# For development:
+#   pip install -e ".[dev]"
+#
+# Everything:
+#   pip install -e ".[demo,yolo,pipeline,dev]"
