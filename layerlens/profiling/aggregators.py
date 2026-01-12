@@ -31,8 +31,10 @@ def aggregate_scores(metrics: Dict[str, float], weights: Dict[str, float]) -> fl
         return 0.0
 
     if np is not None:
-        metric_arr = np.array([metrics[k] for k in keys], dtype=np.float64)
-        weight_arr = np.array([weights.get(k, 0.0) for k in keys], dtype=np.float64)
+        # PERFORMANCE FIX: Use np.fromiter for better memory efficiency
+        # Pre-allocate arrays to avoid intermediate list creation
+        metric_arr = np.fromiter((metrics[k] for k in keys), dtype=np.float64, count=len(keys))
+        weight_arr = np.fromiter((weights.get(k, 0.0) for k in keys), dtype=np.float64, count=len(keys))
 
         if aggregate_scores_c is not None:
             return float(aggregate_scores_c(metric_arr, weight_arr))

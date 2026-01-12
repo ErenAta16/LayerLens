@@ -43,6 +43,9 @@ class AllocationSolver:
     Provides fast allocation using greedy + constraint checking.
     Uses Cython-accelerated helper functions.
     """
+    
+    # PERFORMANCE FIX: Class-level constant to avoid repeated dict creation
+    _METHOD_FACTORS = {"lora": 2.0, "adapter": 1.5, "prefix": 1.0, "none": 0.0}
 
     def __init__(self, config: OptimizationConfig, profiling_config: Optional[ProfilingConfig] = None) -> None:
         self.config = config
@@ -102,16 +105,12 @@ class AllocationSolver:
         # Step 2: Scale ranks to better utilize budget (target: 70-90% utilization)
         # Preserve rank-utility correlation by using uniform scaling
         # Calculate total estimated params with initial ranks
+        # PERFORMANCE FIX: Use class-level constant instead of creating dict each time
         total_estimated_params = 0
         for data in layer_data:
             if data["method"] == "none":
                 continue
-            method_factors = {
-                "lora": 2.0,
-                "adapter": 1.5,
-                "prefix": 1.0,
-            }
-            factor = method_factors.get(data["method"], 2.0)
+            factor = self._METHOD_FACTORS.get(data["method"], 2.0)
             layer_params = int(data["initial_rank"] * data["layer"].hidden_size * factor)
             total_estimated_params += layer_params
         
@@ -187,12 +186,8 @@ class AllocationSolver:
             rank = int(rank)
             
             # Check budget constraint
-            method_factors = {
-                "lora": 2.0,
-                "adapter": 1.5,
-                "prefix": 1.0,
-            }
-            factor = method_factors.get(data["method"], 2.0)
+            # PERFORMANCE FIX: Use class-level constant
+            factor = self._METHOD_FACTORS.get(data["method"], 2.0)
             layer_params = int(rank * data["layer"].hidden_size * factor)
             
             if consumed_params + layer_params > self.config.max_trainable_params:
@@ -335,7 +330,9 @@ class AllocationSolver:
         latency = base + slope * max(rank, 0.0)
 
         # Device factor: GPUs are typically faster per layer, CPUs slower.
-        if profile.device_type.lower() == "gpu":
+        # PERFORMANCE FIX: Cache lower() result to avoid repeated string operations
+        device_type_lower = profile.device_type.lower()
+        if device_type_lower == "gpu":
             device_factor = 0.7
         else:
             # Default to CPU-like behaviour

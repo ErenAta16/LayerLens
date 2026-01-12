@@ -62,12 +62,26 @@ def run_pipeline(
     
     # Normalize utility scores across all layers to 0-1 range for method selection
     # This ensures method selection thresholds work correctly regardless of raw metric scale
+    # PERFORMANCE FIX: Single pass calculation to avoid duplicate aggregate_scores() calls
     all_utilities = []
+    
+    # Pre-compute weights once if not provided (avoid repeated dict creation)
+    default_weights = None
+    if profiling_cfg.metric_weights:
+        weights_template = profiling_cfg.metric_weights
+    else:
+        # Lazy initialization: compute once when needed
+        weights_template = None
+    
+    # Single loop: calculate utilities once
     for layer_name, metrics in sensitivity_scores.items():
         if profiling_cfg.metric_weights:
-            weights = profiling_cfg.metric_weights
+            weights = weights_template
         else:
-            weights = {key: 1.0 / len(metrics) for key in metrics.keys()}
+            # Compute default weights once per unique metric set size
+            if weights_template is None or len(weights_template) != len(metrics):
+                weights_template = {key: 1.0 / len(metrics) for key in metrics.keys()}
+            weights = weights_template
         utility = aggregate_scores(metrics, weights)
         all_utilities.append((layer_name, utility))
     
@@ -77,22 +91,19 @@ def run_pipeline(
         max_util = max(utilities_only)
         util_range = max_util - min_util if max_util > min_util else 1.0
         
-        # Normalize utilities to 0-1 range and store back
+        # Normalize utilities using pre-computed values (no recalculation)
         normalized_scores = {}
-        for layer_name, metrics in sensitivity_scores.items():
-            if profiling_cfg.metric_weights:
-                weights = profiling_cfg.metric_weights
-            else:
-                weights = {key: 1.0 / len(metrics) for key in metrics.keys()}
-            raw_utility = aggregate_scores(metrics, weights)
+        for layer_name, utility in all_utilities:
             # Normalize: (value - min) / range
-            normalized_utility = (raw_utility - min_util) / util_range if util_range > 0 else 0.0
+            normalized_utility = (utility - min_util) / util_range if util_range > 0 else 0.0
             # Scale to 0-0.1 range to match threshold expectations
             normalized_utility = normalized_utility * 0.1
-            # Store normalized utility in a way that solver can use
-            metrics_normalized = metrics.copy()
-            metrics_normalized["_normalized_utility"] = normalized_utility
-            normalized_scores[layer_name] = metrics_normalized
+            # Store normalized utility (avoid unnecessary dict copy)
+            metrics = sensitivity_scores[layer_name]
+            normalized_scores[layer_name] = {
+                **metrics,
+                "_normalized_utility": normalized_utility
+            }
         
         sensitivity_scores = normalized_scores
 
@@ -101,13 +112,13 @@ def run_pipeline(
     allocations = solver.solve(model_spec.layers, sensitivity_scores)
 
     # 3. Feature engineering: Compute layer feature sets.
+    # PERFORMANCE FIX: O(N²) → O(N) by converting allocations to dict first
+    alloc_dict = {a.layer_name: a for a in allocations}
     layer_features = {
         layer.name: compute_layer_features(
             layer=layer,
             total_params=model_spec.total_params,
-            sensitivity=next(
-                (a.utility_score for a in allocations if a.layer_name == layer.name), 0.0
-            ),
+            sensitivity=alloc_dict[layer.name].utility_score if layer.name in alloc_dict else 0.0,
         ).to_dict()
         for layer in model_spec.layers
     }
