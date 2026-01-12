@@ -17,7 +17,15 @@ import numpy as np
 from ..config import ProfilingConfig
 from ..models import LayerSpec
 from .aggregators import aggregate_scores
-from ._batch import gradient_energy_batch, fisher_trace_batch, hutchinson_trace_batch
+
+# Cython modules are optional - fallback to Python if not compiled
+try:
+    from ._batch import gradient_energy_batch, fisher_trace_batch, hutchinson_trace_batch
+except ImportError:
+    # Fallback: define dummy functions that will use Python implementations
+    gradient_energy_batch = None
+    fisher_trace_batch = None
+    hutchinson_trace_batch = None
 
 
 class LayerSensitivityAnalyzer(ABC):
@@ -58,6 +66,7 @@ class GradientEnergyAnalyzer(LayerSensitivityAnalyzer):
     def batch_score(self, gradient_matrix: Any) -> Union[List[float], npt.NDArray[np.float64]]:
         """
         Computes gradient energy scores for multiple layers using Cython function.
+        Falls back to Python implementation if Cython is not available.
         """
 
         grads = np.ascontiguousarray(gradient_matrix, dtype=np.float64)
@@ -75,9 +84,15 @@ class GradientEnergyAnalyzer(LayerSensitivityAnalyzer):
             return []
 
         output = np.zeros(rows, dtype=np.float64)
-        gradient_energy_batch(grads, output)
-        # Optimization: List conversion unnecessary, return NumPy array
-        # Caller can call .tolist() if needed
+        
+        # Use Cython if available, otherwise Python fallback
+        if gradient_energy_batch is not None:
+            gradient_energy_batch(grads, output)
+        else:
+            # Python fallback: compute gradient energy for each row
+            for i in range(rows):
+                output[i] = np.linalg.norm(grads[i]) ** 2
+        
         return output
 
 
@@ -100,6 +115,7 @@ class FisherInformationAnalyzer(LayerSensitivityAnalyzer):
         """
         Computes Fisher trace values for multiple layers.
         Uses diagonal reading for 2D inputs, Hutchinson estimation for 3D inputs.
+        Falls back to Python implementation if Cython is not available.
         """
 
         fisher = np.ascontiguousarray(fisher_matrix, dtype=np.float64)
@@ -121,8 +137,19 @@ class FisherInformationAnalyzer(LayerSensitivityAnalyzer):
             return np.array([], dtype=np.float64)
 
         output = np.zeros(rows, dtype=np.float64)
-        fisher_trace_batch(fisher, output)
-        # Optimization: List conversion unnecessary, return NumPy array
+        
+        # Use Cython if available, otherwise Python fallback
+        if fisher_trace_batch is not None:
+            fisher_trace_batch(fisher, output)
+        else:
+            # Python fallback: compute trace for each row (diagonal sum)
+            for i in range(rows):
+                if fisher.ndim == 2:
+                    # 2D: assume each row is a flattened matrix, compute diagonal
+                    output[i] = np.trace(fisher[i].reshape(int(np.sqrt(fisher.shape[1])), -1))
+                else:
+                    output[i] = np.trace(fisher[i])
+        
         return output
 
     def _hutchinson_trace(self, tensor: np.ndarray) -> np.ndarray:
@@ -131,19 +158,29 @@ class FisherInformationAnalyzer(LayerSensitivityAnalyzer):
         tensor.shape = (layers, dim, dim)
         
         Different seed is used for each layer (based on layer index).
+        Falls back to Python implementation if Cython is not available.
         """
 
         layers, dim, _ = tensor.shape
         samples = max(self.config.fisher_trace_samples, 1)
         output = np.zeros(layers, dtype=np.float64)
         
-        # Dynamic seed: use time-based or hash-based seed
-        # Generate a simple seed for different results on each call
-        import time
-        base_seed = int(time.time() * 1000) % (2**31)  # 32-bit int range
-        
-        # Use Cython implementation (thread-safe, different seed for each layer)
-        hutchinson_trace_batch(tensor, output, samples, base_seed)
+        # Use Cython if available
+        if hutchinson_trace_batch is not None:
+            import time
+            base_seed = int(time.time() * 1000) % (2**31)  # 32-bit int range
+            hutchinson_trace_batch(tensor, output, samples, base_seed)
+        else:
+            # Python fallback: Hutchinson trace estimation
+            np.random.seed(42)  # Fixed seed for reproducibility
+            for layer_idx in range(layers):
+                layer_matrix = tensor[layer_idx]
+                trace_estimate = 0.0
+                for _ in range(samples):
+                    v = np.random.randn(dim)
+                    v = v / np.linalg.norm(v)
+                    trace_estimate += v.T @ layer_matrix @ v
+                output[layer_idx] = trace_estimate / samples
         
         return output
 
