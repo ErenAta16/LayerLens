@@ -16,7 +16,7 @@ pipeline = ["transformers>=4.20.0", "torch>=2.0.0", "torchvision>=0.15.0", "pill
 dev = ["pytest>=7.0.0", "pytest-cov>=4.0.0", "pytest-mock>=3.10.0"]
 
 [tool.setuptools]
-packages = ["layerlens"]
+packages = ["layerlens", "layerlens.cli", "layerlens.config", "layerlens.features", "layerlens.models", "layerlens.optimization", "layerlens.output", "layerlens.pipeline", "layerlens.profiling", "layerlens.validation"]
 
 [[tool.setuptools.ext-modules]]
 name = "layerlens.profiling._aggregators"

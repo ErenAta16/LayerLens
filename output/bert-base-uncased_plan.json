@@ -15,7 +15,7 @@
       "layer": "encoder.layer.1",
       "method": "lora",
       "rank": 1,
-      "utility": 0.01334520673899298,
+      "utility": 0.014864505508478893,
       "cost": 1.0,
       "flops": 1536.0,
       "vram": 0.001,
@@ -25,30 +25,30 @@
     {
       "layer": "encoder.layer.2",
       "method": "lora",
-      "rank": 2,
-      "utility": 0.02082033867506686,
-      "cost": 2.0,
-      "flops": 3072.0,
-      "vram": 0.002,
-      "latency": 5.0188125,
-      "total_score": 308.10208125
+      "rank": 1,
+      "utility": 0.007651203985332468,
+      "cost": 1.0,
+      "flops": 1536.0,
+      "vram": 0.001,
+      "latency": 5.01815625,
+      "total_score": 154.30191562500002
     },
     {
       "layer": "encoder.layer.3",
-      "method": "adapter",
-      "rank": 5,
-      "utility": 0.039203537153811974,
-      "cost": 6.0,
-      "flops": 7680.0,
-      "vram": 0.005,
-      "latency": 5.02078125,
-      "total_score": 769.7025781250001
+      "method": "lora",
+      "rank": 3,
+      "utility": 0.024193941054815475,
+      "cost": 3.0,
+      "flops": 4608.0,
+      "vram": 0.003,
+      "latency": 5.01946875,
+      "total_score": 461.902246875
     },
     {
       "layer": "encoder.layer.4",
       "method": "prefix",
       "rank": 12,
-      "utility": 0.0655957981974896,
+      "utility": 0.06744208662964599,
       "cost": 13.200000000000001,
       "flops": 18432.0,
       "vram": 0.012,
@@ -59,7 +59,7 @@
       "layer": "encoder.layer.5",
       "method": "none",
       "rank": 0,
-      "utility": 0.07755623917426485,
+      "utility": 0.07537162370558022,
       "cost": 0.0,
       "flops": 0.0,
       "vram": 0.0,
@@ -69,30 +69,30 @@
     {
       "layer": "encoder.layer.6",
       "method": "prefix",
-      "rank": 13,
-      "utility": 0.0691745922132259,
-      "cost": 14.3,
-      "flops": 19968.0,
-      "vram": 0.013000000000000001,
-      "latency": 5.02603125,
-      "total_score": 2000.163903125
+      "rank": 9,
+      "utility": 0.059655491343466864,
+      "cost": 9.9,
+      "flops": 13824.0,
+      "vram": 0.009000000000000001,
+      "latency": 5.02340625,
+      "total_score": 1384.883240625
     },
     {
       "layer": "encoder.layer.7",
       "method": "prefix",
-      "rank": 12,
-      "utility": 0.06528681476947526,
-      "cost": 13.200000000000001,
-      "flops": 18432.0,
-      "vram": 0.012,
-      "latency": 5.025375,
-      "total_score": 1846.3437375
+      "rank": 9,
+      "utility": 0.05818151099058771,
+      "cost": 9.9,
+      "flops": 13824.0,
+      "vram": 0.009000000000000001,
+      "latency": 5.02340625,
+      "total_score": 1384.883240625
     },
     {
       "layer": "encoder.layer.8",
       "method": "none",
       "rank": 0,
-      "utility": 0.09239510537697379,
+      "utility": 0.07974777913637228,
       "cost": 0.0,
       "flops": 0.0,
       "vram": 0.0,
@@ -101,20 +101,20 @@
     },
     {
       "layer": "encoder.layer.9",
-      "method": "none",
-      "rank": 0,
-      "utility": 0.07632439562563072,
-      "cost": 0.0,
-      "flops": 0.0,
-      "vram": 0.0,
-      "latency": 0.0,
-      "total_score": 0.0
+      "method": "prefix",
+      "rank": 12,
+      "utility": 0.06832414741362089,
+      "cost": 13.200000000000001,
+      "flops": 18432.0,
+      "vram": 0.012,
+      "latency": 5.025375,
+      "total_score": 1846.3437375
     },
     {
       "layer": "encoder.layer.10",
       "method": "none",
       "rank": 0,
-      "utility": 0.09435436457426491,
+      "utility": 0.1,
       "cost": 0.0,
       "flops": 0.0,
       "vram": 0.0,
@@ -125,7 +125,7 @@
       "layer": "encoder.layer.11",
       "method": "none",
       "rank": 0,
-      "utility": 0.1,
+      "utility": 0.09315231674426717,
       "cost": 0.0,
       "flops": 0.0,
       "vram": 0.0,
@@ -145,86 +145,86 @@
       "encoder.layer.1": {
         "param_share": 7.014836378941461e-06,
         "attention_flag": 1.0,
-        "scaled_sensitivity": 0.01334520673899298
+        "scaled_sensitivity": 0.014864505508478893
       },
       "encoder.layer.2": {
         "param_share": 7.014836378941461e-06,
         "attention_flag": 1.0,
-        "scaled_sensitivity": 0.02082033867506686
+        "scaled_sensitivity": 0.007651203985332468
       },
       "encoder.layer.3": {
         "param_share": 7.014836378941461e-06,
         "attention_flag": 1.0,
-        "scaled_sensitivity": 0.039203537153811974
+        "scaled_sensitivity": 0.024193941054815475
       },
       "encoder.layer.4": {
         "param_share": 7.014836378941461e-06,
         "attention_flag": 1.0,
-        "scaled_sensitivity": 0.0655957981974896
+        "scaled_sensitivity": 0.06744208662964599
       },
       "encoder.layer.5": {
         "param_share": 7.014836378941461e-06,
         "attention_flag": 1.0,
-        "scaled_sensitivity": 0.07755623917426485
+        "scaled_sensitivity": 0.07537162370558022
       },
       "encoder.layer.6": {
         "param_share": 7.014836378941461e-06,
         "attention_flag": 1.0,
-        "scaled_sensitivity": 0.0691745922132259
+        "scaled_sensitivity": 0.059655491343466864
       },
       "encoder.layer.7": {
         "param_share": 7.014836378941461e-06,
         "attention_flag": 1.0,
-        "scaled_sensitivity": 0.06528681476947526
+        "scaled_sensitivity": 0.05818151099058771
       },
       "encoder.layer.8": {
         "param_share": 7.014836378941461e-06,
         "attention_flag": 1.0,
-        "scaled_sensitivity": 0.09239510537697379
+        "scaled_sensitivity": 0.07974777913637228
       },
       "encoder.layer.9": {
         "param_share": 7.014836378941461e-06,
         "attention_flag": 1.0,
-        "scaled_sensitivity": 0.07632439562563072
+        "scaled_sensitivity": 0.06832414741362089
       },
       "encoder.layer.10": {
         "param_share": 7.014836378941461e-06,
         "attention_flag": 1.0,
-        "scaled_sensitivity": 0.09435436457426491
+        "scaled_sensitivity": 0.1
       },
       "encoder.layer.11": {
         "param_share": 7.014836378941461e-06,
         "attention_flag": 1.0,
-        "scaled_sensitivity": 0.1
+        "scaled_sensitivity": 0.09315231674426717
       }
     },
     "gradient_norms": {
-      "encoder.layer.0": 10.4523507528521,
-      "encoder.layer.1": 13.639617970397655,
-      "encoder.layer.2": 14.643748788375863,
-      "encoder.layer.3": 18.222319203826608,
-      "encoder.layer.4": 25.00254170346515,
-      "encoder.layer.5": 27.2483393300473,
-      "encoder.layer.6": 25.000105363950937,
-      "encoder.layer.7": 26.29932209634243,
-      "encoder.layer.8": 28.945768334239816,
-      "encoder.layer.9": 27.209584324583922,
-      "encoder.layer.10": 28.017516883226435,
-      "encoder.layer.11": 31.639953360399225
+      "encoder.layer.0": 24.635485641303667,
+      "encoder.layer.1": 28.206556868264897,
+      "encoder.layer.2": 26.853562299518785,
+      "encoder.layer.3": 30.011989687953992,
+      "encoder.layer.4": 38.49863485198979,
+      "encoder.layer.5": 36.574912474842634,
+      "encoder.layer.6": 33.475011200829215,
+      "encoder.layer.7": 35.003906547987064,
+      "encoder.layer.8": 37.825529804644404,
+      "encoder.layer.9": 33.418074243229256,
+      "encoder.layer.10": 33.39948517788834,
+      "encoder.layer.11": 32.846820614059425
     },
     "fisher_traces": {
-      "encoder.layer.0": 902.7535598797258,
-      "encoder.layer.1": 1304.6385756439995,
-      "encoder.layer.2": 1529.0621745516546,
-      "encoder.layer.3": 2083.807517979294,
-      "encoder.layer.4": 2878.862886156421,
-      "encoder.layer.5": 3239.254887023941,
-      "encoder.layer.6": 2986.8558698550332,
-      "encoder.layer.7": 2867.7376606749604,
-      "encoder.layer.8": 3684.7591230699327,
-      "encoder.layer.9": 3199.7472483114107,
-      "encoder.layer.10": 3744.437115922454,
-      "encoder.layer.11": 3912.9306861243676
+      "encoder.layer.0": 1262.0881301651243,
+      "encoder.layer.1": 1585.4000787511468,
+      "encoder.layer.2": 1427.6197755611502,
+      "encoder.layer.3": 1786.617833668366,
+      "encoder.layer.4": 2724.8073165928945,
+      "encoder.layer.5": 2895.660991348326,
+      "encoder.layer.6": 2555.0221714226063,
+      "encoder.layer.7": 2524.88853683864,
+      "encoder.layer.8": 2992.5011279929895,
+      "encoder.layer.9": 2744.369953295449,
+      "encoder.layer.10": 3430.388950413675,
+      "encoder.layer.11": 3282.504718004202
     }
   }
 }

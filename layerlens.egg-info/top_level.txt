@@ -1,1 +1,7 @@
-hyperlora
+demos
+docs
+experiments
+layerlens
+output
+scripts
+tests
