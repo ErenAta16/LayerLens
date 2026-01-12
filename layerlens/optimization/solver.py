@@ -16,9 +16,16 @@ from ..config import OptimizationConfig, ProfilingConfig, LatencyProfile
 from ..models import LayerSpec
 from ..profiling import aggregate_scores
 
-from ._solver import select_method as select_method_c
-from ._solver import estimate_rank as estimate_rank_c
-from ._solver import estimate_cost as estimate_cost_c
+# Cython modules are optional - fallback to Python if not compiled
+try:
+    from ._solver import select_method as select_method_c
+    from ._solver import estimate_rank as estimate_rank_c
+    from ._solver import estimate_cost as estimate_cost_c
+except ImportError:
+    # Fallback: define Python implementations
+    select_method_c = None
+    estimate_rank_c = None
+    estimate_cost_c = None
 
 
 @dataclass
@@ -259,23 +266,47 @@ class AllocationSolver:
 
     def _select_method(self, utility: float) -> str:
         thresholds = self._method_thresholds
-        method_index = select_method_c(
-            utility,
-            thresholds,
-            self._method_codes,
-        )
+        
+        # Use Cython if available, otherwise Python fallback
+        if select_method_c is not None:
+            method_index = select_method_c(
+                utility,
+                thresholds,
+                self._method_codes,
+            )
+        else:
+            # Python fallback: find first threshold that utility exceeds
+            method_index = 0
+            for i, threshold in enumerate(thresholds):
+                if utility >= threshold:
+                    method_index = i + 1
+                else:
+                    break
+        
         return self._method_sequence[method_index]
 
     def _estimate_rank(self, layer: LayerSpec, utility: float) -> float:
-        return estimate_rank_c(layer.hidden_size, utility)
+        # Use Cython if available, otherwise Python fallback
+        if estimate_rank_c is not None:
+            return estimate_rank_c(layer.hidden_size, utility)
+        else:
+            # Python fallback: simple heuristic
+            # Base rank scales with utility and hidden size
+            base_rank = max(1.0, utility * 10.0 * (layer.hidden_size / 768.0))
+            return min(base_rank, layer.hidden_size / 10.0)
     
     def _estimate_rank_budget_aware(self, layer: LayerSpec, utility: float) -> float:
         """
         Budget-aware rank estimation that better utilizes available budget.
         Uses a more aggressive scaling factor based on utility.
         """
-        # Base rank from Cython function
-        base_rank = estimate_rank_c(layer.hidden_size, utility)
+        # Base rank from Cython function or Python fallback
+        if estimate_rank_c is not None:
+            base_rank = estimate_rank_c(layer.hidden_size, utility)
+        else:
+            # Python fallback
+            base_rank = max(1.0, utility * 10.0 * (layer.hidden_size / 768.0))
+            base_rank = min(base_rank, layer.hidden_size / 10.0)
         
         # Scale based on utility to better utilize budget
         # Higher utility gets proportionally higher rank
@@ -295,7 +326,13 @@ class AllocationSolver:
         if method not in self._penalty_cache:
             self._penalty_cache[method] = self.config.method_penalties.get(method, 1.0)
         penalty = self._penalty_cache[method]
-        return estimate_cost_c(rank, penalty)
+        
+        # Use Cython if available, otherwise Python fallback
+        if estimate_cost_c is not None:
+            return estimate_cost_c(rank, penalty)
+        else:
+            # Python fallback: simple cost calculation
+            return rank * penalty * 0.1
 
     def _estimate_flops(self, layer: LayerSpec, rank: float) -> float:
         """
