@@ -9,7 +9,7 @@ that will be accelerated with Cython implementations in the future.
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import Dict, Any, List, Union
+from typing import Dict, Any
 import numpy.typing as npt
 
 import numpy as np
@@ -64,7 +64,7 @@ class GradientEnergyAnalyzer(LayerSensitivityAnalyzer):
         # Normalize once by hidden size to make scores comparable across layers.
         return gradient_norm / max(layer.hidden_size, 1)
 
-    def batch_score(self, gradient_matrix: Any) -> Union[List[float], npt.NDArray[np.float64]]:
+    def batch_score(self, gradient_matrix: Any) -> npt.NDArray[np.float64]:
         """
         Computes gradient energy scores for multiple layers using Cython function.
         Falls back to Python implementation if Cython is not available.
@@ -85,7 +85,7 @@ class GradientEnergyAnalyzer(LayerSensitivityAnalyzer):
 
         rows = grads.shape[0]
         if rows == 0:
-            return []
+            return np.array([], dtype=np.float64)
 
         output = np.zeros(rows, dtype=np.float64)
         
