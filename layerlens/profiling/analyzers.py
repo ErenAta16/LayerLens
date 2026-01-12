@@ -16,6 +16,7 @@ import numpy as np
 
 from ..config import ProfilingConfig
 from ..models import LayerSpec
+from ..exceptions import ProfilingError
 from .aggregators import aggregate_scores
 
 # Cython modules are optional - fallback to Python if not compiled
@@ -69,13 +70,16 @@ class GradientEnergyAnalyzer(LayerSensitivityAnalyzer):
         Falls back to Python implementation if Cython is not available.
         """
 
-        grads = np.ascontiguousarray(gradient_matrix, dtype=np.float64)
+        try:
+            grads = np.ascontiguousarray(gradient_matrix, dtype=np.float64)
+        except Exception as e:
+            raise ProfilingError(f"Failed to convert gradient_matrix to array: {e}") from e
         
         # Edge case: Empty or invalid input
         if grads.size == 0:
-            return []
+            return np.array([], dtype=np.float64)
         if grads.ndim != 2:
-            raise ValueError(
+            raise ProfilingError(
                 f"gradient_matrix must be 2D, got {grads.ndim}D"
             )
 
@@ -111,20 +115,23 @@ class FisherInformationAnalyzer(LayerSensitivityAnalyzer):
         fisher_trace = activations.get("fisher_trace", 0.0)
         return fisher_trace / (layer.hidden_size ** 0.5)
 
-    def batch_score(self, fisher_matrix: Any) -> Union[List[float], npt.NDArray[np.float64]]:
+    def batch_score(self, fisher_matrix: Any) -> npt.NDArray[np.float64]:
         """
         Computes Fisher trace values for multiple layers.
         Uses diagonal reading for 2D inputs, Hutchinson estimation for 3D inputs.
         Falls back to Python implementation if Cython is not available.
         """
 
-        fisher = np.ascontiguousarray(fisher_matrix, dtype=np.float64)
+        try:
+            fisher = np.ascontiguousarray(fisher_matrix, dtype=np.float64)
+        except Exception as e:
+            raise ProfilingError(f"Failed to convert fisher_matrix to array: {e}") from e
 
         # Edge case: Empty or invalid input
         if fisher.size == 0:
-            return []
+            return np.array([], dtype=np.float64)
         if fisher.ndim not in (2, 3):
-            raise ValueError(
+            raise ProfilingError(
                 f"fisher_matrix must be 2D or 3D, got {fisher.ndim}D"
             )
 

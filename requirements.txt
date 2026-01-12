@@ -1,21 +1,31 @@
 # LayerLens Core Dependencies
-# For basic functionality
+# ============================
+# For basic functionality (always required)
 numpy>=1.24
 scipy>=1.10.0
 
-# For demos and real model usage
-transformers>=4.20.0
-torch>=2.0.0
+# Optional: For demos and real model usage
+# Uncomment if you want to run demos
+# transformers>=4.20.0
+# torch>=2.0.0
 
-# For YOLO integration
-ultralytics>=8.0.0
-torchvision>=0.15.0
+# Optional: For YOLO integration
+# Uncomment if you want to use YOLO models
+# ultralytics>=8.0.0
+# torchvision>=0.15.0
 
-# For LLM-YOLO pipeline
-pillow>=9.0.0
+# Optional: For LLM-YOLO pipeline
+# Uncomment if you want to use the pipeline
+# pillow>=9.0.0
 
 # Build dependencies (for Cython compilation)
-setuptools>=65
-wheel
-Cython>=3.0
+# Uncomment for development or if you want Cython acceleration
+# setuptools>=65
+# wheel
+# Cython>=3.0
+
+# Note: For full installation with all optional dependencies, use:
+# pip install -e ".[demo,yolo,pipeline]"
+#
+# For Colab, the Python fallback works without Cython compilation.
 

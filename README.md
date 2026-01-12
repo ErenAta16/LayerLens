@@ -4,6 +4,12 @@ title: LayerLens - Adaptive Low-Rank Adaptation Selector
 
 # LayerLens
 
+[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
+[![Tests](https://img.shields.io/badge/tests-15%2F15-brightgreen)](tests/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+**LayerLens** is a Cython-accelerated selection engine that automatically determines the optimal PEFT (Parameter-Efficient Fine-Tuning) method and rank for each layer in large language and vision models.
+
 **LayerLens** is a Cython-accelerated selection engine that automatically determines the optimal PEFT (Parameter-Efficient Fine-Tuning) method and rank for each layer in large language and vision models.
 
 ## Overview

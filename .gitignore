@@ -36,7 +36,14 @@ Thumbs.db
 
 # Jupyter
 .ipynb_checkpoints/
-*.ipynb
+# Ignore temporary/test notebooks, but keep documented examples
+*_scratch.ipynb
+*_temp.ipynb
+*_test.ipynb
+# Keep documented notebooks in notebooks/ and examples/ directories
+!notebooks/**/*.ipynb
+!examples/**/*.ipynb
+!colab_demos/**/*.ipynb
 
 # Environment
 .env
