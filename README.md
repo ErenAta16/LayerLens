@@ -131,14 +131,138 @@ The gradient side exceeded the target significantly. The Fisher side met the tar
 | Metrics | Fine-tune wall time, GPU memory usage, task accuracy/F1, inference latency |
 | Ablations | Sensitivity metric variants, optimizer heuristics, with/without hypernetwork |
 
+## Quick Start
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/ErenAta16/LayerLens.git
+cd LayerLens
+
+# Install in editable mode with all dependencies
+pip install -e ".[demo,yolo,pipeline]"
+
+# Or install minimal dependencies
+pip install -e .
+```
+
+### Basic Usage
+
+```python
+from layerlens.pipeline import run_pipeline
+from layerlens.config import ProfilingConfig, OptimizationConfig, LatencyProfile
+from layerlens.models import ModelSpec, LayerSpec
+
+# Define your model
+model_spec = ModelSpec(
+    model_name="bert-base-uncased",
+    total_params=110_000_000,
+    layers=[
+        LayerSpec(name=f"encoder.layer.{i}", hidden_size=768, layer_type="transformer")
+        for i in range(12)
+    ]
+)
+
+# Configure profiling
+profiling_cfg = ProfilingConfig(
+    metric_weights={"gradient_energy": 0.4, "fisher": 0.4, "proxy_eval": 0.2}
+)
+
+# Configure optimization with latency profile
+latency_profile = LatencyProfile(
+    device_type="gpu",
+    model_family="llm",
+    batch_size=4,
+    sequence_length=512
+)
+
+optimization_cfg = OptimizationConfig(
+    max_trainable_params=50_000,
+    max_flops=1e9,
+    max_vram_gb=8.0,
+    latency_profile=latency_profile
+)
+
+# Prepare activation cache (from your model profiling)
+activation_cache = {
+    f"encoder.layer.{i}": {
+        "grad_norm": 0.5 + i * 0.1,
+        "fisher_trace": 0.3 + i * 0.05
+    }
+    for i in range(12)
+}
+
+# Run pipeline
+from pathlib import Path
+output_dir = Path("./output")
+manifest_path = run_pipeline(
+    model_spec=model_spec,
+    profiling_cfg=profiling_cfg,
+    optimization_cfg=optimization_cfg,
+    activation_cache=activation_cache,
+    output_dir=output_dir
+)
+
+print(f"Manifest saved to: {manifest_path}")
+```
+
+### Running Demos
+
+```bash
+# BERT demo
+python demos/demo_bert.py
+
+# YOLO demo
+python demos/demo_yolo.py
+
+# LLM-YOLO pipeline
+python demos/llm_yolo_pipeline.py
+```
+
+### Testing
+
+```bash
+# Run all tests
+pytest tests/ -v
+
+# Run with coverage
+pytest tests/ --cov=layerlens --cov-report=html
+```
+
+## Google Colab Setup
+
+For running on Google Colab with A100 GPU, use the following setup cells:
+
+### Cell 1: Install Dependencies
+```python
+!git clone https://github.com/ErenAta16/LayerLens.git
+%cd LayerLens
+!pip install -e ".[demo,yolo,pipeline]" -q
+```
+
+### Cell 2: Verify GPU
+```python
+import torch
+print(f"CUDA available: {torch.cuda.is_available()}")
+print(f"GPU: {torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'CPU'}")
+```
+
+### Cell 3: Run BERT Demo
+```python
+# Copy content from demos/demo_bert.py
+# Or import and run directly
+from demos.demo_bert import main
+main()
+```
+
 ## Roadmap
 
-1. Finalize literature review notes and requirement specification.
-2. Implement profiling kernels in Cython (gradient/Fisher + proxy training).
-3. Develop the constrained optimization solver and manifest generator.
-4. Build CLI/REST interface and sample pipeline integrations.
-5. Execute benchmark suite and publish results with reproducible scripts.
-6. Prepare academic report and public technical documentation.
+1. ✅ Implement profiling kernels in Cython (gradient/Fisher + proxy training).
+2. ✅ Develop the constrained optimization solver and manifest generator.
+3. ✅ Build CLI/REST interface and sample pipeline integrations.
+4. ✅ Execute benchmark suite and publish results with reproducible scripts.
+5. 🔄 Prepare academic report and public technical documentation.
 
 ## Expected Contributions
 

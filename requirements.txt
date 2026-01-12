@@ -1,0 +1,21 @@
+# LayerLens Core Dependencies
+# For basic functionality
+numpy>=1.24
+scipy>=1.10.0
+
+# For demos and real model usage
+transformers>=4.20.0
+torch>=2.0.0
+
+# For YOLO integration
+ultralytics>=8.0.0
+torchvision>=0.15.0
+
+# For LLM-YOLO pipeline
+pillow>=9.0.0
+
+# Build dependencies (for Cython compilation)
+setuptools>=65
+wheel
+Cython>=3.0
+
