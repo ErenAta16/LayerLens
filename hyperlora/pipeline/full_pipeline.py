@@ -1,9 +1,10 @@
 """
-pipeline.py
------------
-Contains reference command-line function that runs end-to-end stages:
+full_pipeline.py
+----------------
+Contains the main end-to-end pipeline orchestration function that runs:
 Profiling → Optimization → Manifest generation.
-This module provides an example orchestration flow for package users.
+
+This module provides the core orchestration flow for LayerLens.
 """
 
 from __future__ import annotations
@@ -32,10 +33,18 @@ def run_pipeline(
     output_dir: Path,
 ) -> Path:
     """
-    Simplified end-to-end execution.
-    Note: This function works with the provided activation dictionary, not real data.
+    Run the complete LayerLens pipeline: profiling → optimization → manifest generation.
+    
+    Args:
+        model_spec: Model specification with layer information
+        profiling_cfg: Profiling configuration
+        optimization_cfg: Optimization configuration with constraints
+        activation_cache: Dictionary mapping layer names to activation metrics
+        output_dir: Directory to save the generated manifest
+        
+    Returns:
+        Path to the generated manifest JSON file
     """
-
     # 1. Profiling: Compute layer scores.
     gradient_analyzer = GradientEnergyAnalyzer(profiling_cfg)
     fisher_analyzer = FisherInformationAnalyzer(profiling_cfg)
@@ -59,7 +68,6 @@ def run_pipeline(
             weights = profiling_cfg.metric_weights
         else:
             weights = {key: 1.0 / len(metrics) for key in metrics.keys()}
-        from ..profiling import aggregate_scores
         utility = aggregate_scores(metrics, weights)
         all_utilities.append((layer_name, utility))
     
@@ -76,14 +84,12 @@ def run_pipeline(
                 weights = profiling_cfg.metric_weights
             else:
                 weights = {key: 1.0 / len(metrics) for key in metrics.keys()}
-            from ..profiling import aggregate_scores
             raw_utility = aggregate_scores(metrics, weights)
             # Normalize: (value - min) / range
             normalized_utility = (raw_utility - min_util) / util_range if util_range > 0 else 0.0
             # Scale to 0-0.1 range to match threshold expectations
             normalized_utility = normalized_utility * 0.1
             # Store normalized utility in a way that solver can use
-            # We'll modify metrics to include normalized utility
             metrics_normalized = metrics.copy()
             metrics_normalized["_normalized_utility"] = normalized_utility
             normalized_scores[layer_name] = metrics_normalized
