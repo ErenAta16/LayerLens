@@ -6,6 +6,8 @@ low-rank adaptation selection, and manifest generation. Each submodule provides
 Python interfaces for core algorithms that will be accelerated with Cython.
 """
 
+__version__ = "0.1.0"
+
 from .config import ProfilingConfig, OptimizationConfig, LatencyProfile
 
 # Import submodules to make them available for type checking
@@ -40,5 +42,6 @@ __all__ = [
     "ManifestError",
     "ModelSpecError",
     "ActivationCacheError",
+    "__version__",
 ]
 

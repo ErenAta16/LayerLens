@@ -1,30 +1,53 @@
-# LayerLens Colab Notebooks
+# LayerLens Notebooks
 
-This directory contains Jupyter notebooks for running LayerLens on Google Colab.
+This directory contains Jupyter notebooks for interactive demos and tutorials.
 
 ## Quick Start
 
+### Google Colab
+Click the badge below to open the quick start notebook directly in Google Colab:
+
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ErenAta16/LayerLens/blob/main/notebooks/colab_quick_start.ipynb)
 
-Click the badge above to open the quick start notebook in Colab.
+### Available Notebooks
 
-## Available Notebooks
+#### `colab_quick_start.ipynb`
+**Recommended for first-time users**
 
-- **colab_quick_start.ipynb** - Quick start guide with BERT demo
-- **colab_bert_demo.ipynb** - Full BERT-base optimization example
-- **colab_yolo_demo.ipynb** - YOLO model optimization example
+A beginner-friendly introduction to LayerLens on Google Colab:
+- ✅ One-click installation
+- ✅ GPU verification
+- ✅ Simple BERT example
+- ✅ Results visualization
+- ⏱️ ~5 minutes to complete
 
-## Requirements
+**Topics covered:**
+- Installing LayerLens on Colab
+- Defining model specifications
+- Configuring profiling and optimization
+- Running the pipeline
+- Interpreting results
 
-- Google Colab account
-- GPU runtime (recommended, but CPU works too)
-- ~5 minutes setup time
+## Local Usage
 
-## Usage
+To run these notebooks locally:
 
-1. Open a notebook in Colab using the badge links
-2. Run cells sequentially
-3. Check output in `./output/` directory
+```bash
+# Install Jupyter
+pip install jupyter
 
-For troubleshooting, see `docs/TROUBLESHOOTING.md`.
+# Install LayerLens with demo dependencies
+pip install -e ".[demo]"
+
+# Start Jupyter
+jupyter notebook notebooks/
+```
+
+## Troubleshooting
+
+If you encounter issues on Colab, see [COLAB_TROUBLESHOOT.md](../COLAB_TROUBLESHOOT.md) for solutions.
+
+## Contributing
+
+Want to add more notebooks? See [CONTRIBUTING.md](../CONTRIBUTING.md) for guidelines.
 
