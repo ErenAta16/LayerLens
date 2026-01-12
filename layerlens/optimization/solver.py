@@ -15,6 +15,10 @@ from typing import Optional
 from ..config import OptimizationConfig, ProfilingConfig, LatencyProfile
 from ..models import LayerSpec
 from ..profiling import aggregate_scores
+from ..exceptions import OptimizationError
+from ..utils.logging import get_logger
+
+logger = get_logger()
 
 # Cython modules are optional - fallback to Python if not compiled
 try:
@@ -71,7 +75,24 @@ class AllocationSolver:
         """
         Returns candidate method and rank assignment for each layer.
         The sensitivity_scores dictionary contains layer name -> metric scores.
+        
+        Args:
+            layers: List of layer specifications
+            sensitivity_scores: Dictionary mapping layer names to metric scores
+            
+        Returns:
+            List of allocation results for each layer
+            
+        Raises:
+            OptimizationError: If optimization fails
         """
+        if not layers:
+            raise OptimizationError("Cannot solve: layers list is empty")
+        
+        if not sensitivity_scores:
+            raise OptimizationError("Cannot solve: sensitivity_scores is empty")
+        
+        logger.debug(f"Solving optimization for {len(layers)} layers")
 
         results: List[AllocationResult] = []
         

@@ -17,7 +17,7 @@ dev = ["pytest>=7.0.0", "pytest-cov>=4.0.0", "pytest-mock>=3.10.0"]
 
 [tool.setuptools]
 # Use find_packages to automatically discover all packages
-# This ensures all subpackages are included, including 'output'
+# This ensures all subpackages are included, including 'output' and 'utils'
 packages = { find = {} }
 
 [[tool.setuptools.ext-modules]]

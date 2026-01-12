@@ -17,9 +17,11 @@ dist/
 .eggs/
 
 # Generated outputs (important ones documented in README)
-output/
+# Only ignore root-level output/, not layerlens/output/ package
+/output/
 *.json
 !**/test_*.json  # Keep test fixtures if needed
+!layerlens/output/**  # Keep layerlens/output package
 
 # IDE
 .vscode/

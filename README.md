@@ -181,6 +181,7 @@ optimization_cfg = OptimizationConfig(
     max_trainable_params=50_000,
     max_flops=1e9,
     max_vram_gb=8.0,
+    latency_target_ms=100.0,
     latency_profile=latency_profile
 )
 
@@ -229,6 +230,39 @@ pytest tests/ -v
 # Run with coverage
 pytest tests/ --cov=layerlens --cov-report=html
 ```
+
+### Error Handling
+
+LayerLens provides comprehensive error handling with specific exception types:
+
+```python
+from layerlens.exceptions import (
+    ConfigurationError,
+    ModelSpecError,
+    ActivationCacheError,
+    ProfilingError,
+    OptimizationError,
+    ManifestError,
+)
+from layerlens.utils.validation import (
+    validate_model_spec,
+    validate_activation_cache,
+    validate_config,
+)
+
+# Validate inputs before running pipeline
+try:
+    validate_model_spec(model_spec)
+    validate_activation_cache(activation_cache, model_spec)
+    validate_config(profiling_cfg, optimization_cfg)
+    
+    manifest_path = run_pipeline(...)
+except (ModelSpecError, ActivationCacheError, ConfigurationError) as e:
+    print(f"Validation failed: {e}")
+    # Fix inputs and retry
+```
+
+See `docs/ERROR_HANDLING.md` for detailed error handling guide.
 
 ## Google Colab Setup
 

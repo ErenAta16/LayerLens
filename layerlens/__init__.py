@@ -13,6 +13,32 @@ from . import validation  # noqa: F401
 from . import models  # noqa: F401
 from . import cli  # noqa: F401
 from . import pipeline  # noqa: F401
+from . import exceptions  # noqa: F401
+from . import utils  # noqa: F401
 
-__all__ = ["ProfilingConfig", "OptimizationConfig", "LatencyProfile"]
+# Export exceptions for user convenience
+from .exceptions import (
+    LayerLensError,
+    ConfigurationError,
+    ValidationError,
+    OptimizationError,
+    ProfilingError,
+    ManifestError,
+    ModelSpecError,
+    ActivationCacheError,
+)
+
+__all__ = [
+    "ProfilingConfig",
+    "OptimizationConfig",
+    "LatencyProfile",
+    "LayerLensError",
+    "ConfigurationError",
+    "ValidationError",
+    "OptimizationError",
+    "ProfilingError",
+    "ManifestError",
+    "ModelSpecError",
+    "ActivationCacheError",
+]
 

@@ -7,6 +7,8 @@ Contains ProfilingConfig data class for layer sensitivity analysis configuration
 from dataclasses import dataclass, field
 from typing import List, Dict
 
+from ..exceptions import ConfigurationError
+
 
 @dataclass
 class ProfilingConfig:
@@ -34,32 +36,43 @@ class ProfilingConfig:
     def __post_init__(self) -> None:
         """
         Validates config values.
+        
+        Raises:
+            ConfigurationError: If configuration is invalid
         """
         # Fisher trace samples: minimum 1, maximum 1000 (for performance)
         if self.fisher_trace_samples < 1:
-            raise ValueError(
+            raise ConfigurationError(
                 f"fisher_trace_samples must be at least 1, got {self.fisher_trace_samples}"
             )
         if self.fisher_trace_samples > 1000:
-            raise ValueError(
+            raise ConfigurationError(
                 f"fisher_trace_samples must be at most 1000, got {self.fisher_trace_samples}"
             )
 
         # Calibration batch size: must be positive
         if self.calibration_batch_size <= 0:
-            raise ValueError(
+            raise ConfigurationError(
                 f"calibration_batch_size must be positive, got {self.calibration_batch_size}"
             )
 
         # Gradient window: must be positive
         if self.gradient_window <= 0:
-            raise ValueError(
+            raise ConfigurationError(
                 f"gradient_window must be positive, got {self.gradient_window}"
             )
 
         # Proxy steps: must be positive
         if self.proxy_steps <= 0:
-            raise ValueError(
+            raise ConfigurationError(
                 f"proxy_steps must be positive, got {self.proxy_steps}"
             )
+        
+        # Validate metric weights if provided
+        if self.metric_weights:
+            total_weight = sum(self.metric_weights.values())
+            if total_weight <= 0:
+                raise ConfigurationError(
+                    f"metric_weights must have positive total, got {total_weight}"
+                )
 
